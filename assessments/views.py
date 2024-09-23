@@ -16,7 +16,7 @@ class AssessmentView:
             raise InvalidScoreEx()
 
 
-class AssessmentListCreateView(generics.ListCreateAPIView):
+class AssessmentListCreateView(AssessmentView, generics.ListCreateAPIView):
     serializer_class = AssessmentSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
@@ -31,7 +31,7 @@ class AssessmentListCreateView(generics.ListCreateAPIView):
         self.validate_score(serializer)
         serializer.save()
 
-class AssessmentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class AssessmentRetrieveUpdateDestroyView(AssessmentView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AssessmentSerializer
     permission_classes = [IsAuthenticated]
 
@@ -41,5 +41,9 @@ class AssessmentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView)
         return Assessment.objects.filter(patient__doctor=self.request.user)
 
     def perform_create(self, serializer):
+        self.validate_score(serializer)
+        serializer.save()
+
+    def perform_update(self, serializer):
         self.validate_score(serializer)
         serializer.save()
