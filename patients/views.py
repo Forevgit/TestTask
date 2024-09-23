@@ -12,9 +12,9 @@ class PatientView:
 
     def valid_date_of_birth(self, serializer):
         date_of_birth = serializer.validated_data.get('date_of_birth')
-
-        if date_of_birth > date.today():
-            raise InvalidPatientDateOfBirthEx()
+        if date_of_birth:
+            if date_of_birth > date.today():
+                raise InvalidPatientDateOfBirthEx()
 
 
     def check_doctor_permission(self, patient, request):
@@ -48,7 +48,7 @@ class PatientRetrieveUpdateDestroyView(PatientView, generics.RetrieveUpdateDestr
     def perform_update(self, serializer):
         patient = self.get_object()
         self.check_doctor_permission(patient, self.request)
-        self.valid_date_of_birth(serializer.validated_data['date_of_birth'])
+        self.valid_date_of_birth(serializer)
         serializer.save()
 
     def perform_destroy(self, instance):
