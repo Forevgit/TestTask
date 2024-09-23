@@ -1,0 +1,48 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual Environments
+env/
+venv/
+.venv/
+
+# Django stuff:
+*.log
+media/
+
+# Ignore static files created by collectstatic
+/staticfiles/
+/static/
+
+# Ignore .env files with environment variables
+.env
+*.env
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# PostgreSQL
+pgdata/
+
+# Pycharm
+.idea/
+
+
+# Migrations
+**/migrations/*
+
+# pytest
+.cache/
+
