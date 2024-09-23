@@ -6,6 +6,7 @@ from .filters import PatientFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
 from .exceptions import InvalidPatientDateOfBirthEx, PermissionDeniedEx
+from rest_framework.filters import OrderingFilter
 
 class PatientView:
     """Basic class for Patient"""
@@ -24,8 +25,9 @@ class PatientView:
 class PatientListCreateView(PatientView, generics.ListCreateAPIView):
     serializer_class = PatientSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = PatientFilter
+    ordering_fields = ['full_name', 'date_of_birth']
 
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):

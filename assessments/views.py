@@ -5,6 +5,7 @@ from .models import Assessment
 from .serializers import AssessmentSerializer
 from .filters import AssessmentFilter
 from .exceptions import InvalidScoreEx
+from rest_framework.filters import OrderingFilter
 
 
 class AssessmentView:
@@ -19,8 +20,9 @@ class AssessmentView:
 class AssessmentListCreateView(AssessmentView, generics.ListCreateAPIView):
     serializer_class = AssessmentSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AssessmentFilter
+    ordering_fields = ['final_score', 'assessment_date']
 
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):
