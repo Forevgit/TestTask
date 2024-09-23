@@ -22,6 +22,11 @@ class PatientView:
         if patient.doctor != self.request.user:
             raise PermissionDeniedEx()
 
+    def get_patient_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Patient.objects.none()
+        return Patient.objects.filter(doctor=self.request.user)
+
 class PatientListCreateView(PatientView, generics.ListCreateAPIView):
     serializer_class = PatientSerializer
     permission_classes = [IsAuthenticated]
@@ -30,9 +35,7 @@ class PatientListCreateView(PatientView, generics.ListCreateAPIView):
     ordering_fields = ['full_name', 'date_of_birth']
 
     def get_queryset(self):
-        if getattr(self, 'swagger_fake_view', False):
-            return Patient.objects.none()
-        return Patient.objects.filter(doctor=self.request.user)
+        return self.get_patient_queryset()
 
     def perform_create(self, serializer):
         self.valid_date_of_birth(serializer)
@@ -43,9 +46,7 @@ class PatientRetrieveUpdateDestroyView(PatientView, generics.RetrieveUpdateDestr
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        if getattr(self, 'swagger_fake_view', False):
-            return Patient.objects.none()
-        return Patient.objects.filter(doctor=self.request.user)
+        return self.get_patient_queryset()
 
     def perform_update(self, serializer):
         patient = self.get_object()
