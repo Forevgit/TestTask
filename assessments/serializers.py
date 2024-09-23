@@ -17,7 +17,6 @@ class AssessmentSerializer(serializers.ModelSerializer):
         fields = ['id', 'assessment_type', 'patient', 'assessment_date', 'questions', 'final_score']
 
     def create(self, validated_data):
-
         questions_data = validated_data.pop('assessment_questions')
 
         assessment = Assessment.objects.create(**validated_data)
